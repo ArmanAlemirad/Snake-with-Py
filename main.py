@@ -80,3 +80,11 @@
 #
 # for x in food:
 #     print(x)
+
+#functions
+
+# def hello(first_name, last_name, age):
+#     print("Hello " + first_name + " " + last_name + "!", str(age) + " years old")
+#     print("Have a nice day")
+#
+# hello("Bro","Code", 21)
