@@ -65,3 +65,18 @@
 # else:
 #     print("You are a child")
 
+# list
+#
+# food = ["pizza", "hamburger", "hotdog", "spaghetti", "sushi", "pudding"]
+#
+# food[0] = "chicken"
+# #print(food)
+#
+# #food.append("ice-cream")
+# #food.remove("ice-cream")
+# #food.pop()
+# #food.insert(0, "cake")
+# #food.sort()
+#
+# for x in food:
+#     print(x)
