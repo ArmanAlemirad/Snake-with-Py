@@ -43,3 +43,14 @@
 #
 # age = int(input("How old are you? "))
 # print("You are " + str(age) + " years")
+
+#slicing [start: stop: step]
+
+# name = "Bro Code"
+#
+# first_name = name[:3]
+# last_name = name[4:]
+# funky_name = name[0:8:2]
+#
+# print(funky_name)
+
