@@ -54,3 +54,14 @@
 #
 # print(funky_name)
 
+#If statement
+
+# age = int(input("How old are you? "))
+#
+# if age >= 18:
+#     print("You are a adult")
+# elif age < 0:
+#     print("You havent been born get")
+# else:
+#     print("You are a child")
+
