@@ -1,6 +1,5 @@
-﻿# learning python by creating the game snake
-This is a learning project to learn python. 
-The project is a simple snake game. 
+﻿# Learning python by creating the game snake
+This is a python learning project
 
 
 ## How to Play
