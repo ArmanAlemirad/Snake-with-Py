@@ -4,12 +4,12 @@ from turtle import Turtle
 
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
-SPEED = 50
+SPEED = 80
 SPACE_SIZE = 50
 BODY_PARTS = 3
-SNAKE_COLOR = "green"
-FOOD_COLOR = "red"
-BACKGROUND_COLOR = "black"
+SNAKE_COLOR = "#00FF00"
+FOOD_COLOR = "#FF0000"
+BACKGROUND_COLOR = "#000000"
 
 
 class Snake:
@@ -27,11 +27,17 @@ class Snake:
 
 
 class Food:
-    def __init__(self):
-        x = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
-        y = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
+    def __init__(self, snake_coordinates):
+        while True:
+            x = random.randint(0, (GAME_WIDTH // SPACE_SIZE) - 1) * SPACE_SIZE
+            y = random.randint(0, (GAME_HEIGHT // SPACE_SIZE) - 1) * SPACE_SIZE
 
-        self.coordinates = [x, y]
+            food_position = (x, y)
+
+            if food_position not in snake_coordinates:
+                self.coordinates = [x, y]
+                break
+
         canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tags="food")
 
 
@@ -56,13 +62,27 @@ def next_turn(snake, food):
 
     snake.squares.insert(0, square)
 
-    del snake.coordinates[-1]
+    if x == food.coordinates[0] and y == food.coordinates[1]:
+        global score
+        score += 1
 
-    canvas.delete(snake.squares[-1])
+        label.config(text="Score: {}".format(score))
+        canvas.delete("food")
 
-    del snake.squares[-1]
+        food = Food(snake.coordinates)
 
-    window.after(SPEED, next_turn, snake, food)
+    else:
+        del snake.coordinates[-1]
+
+        canvas.delete(snake.squares[-1])
+
+        del snake.squares[-1]
+
+    if check_collision(snake):
+        game_over()
+
+    else:
+        window.after(SPEED, next_turn, snake, food)
 
 
 def change_direction(new_direction):
@@ -82,12 +102,42 @@ def change_direction(new_direction):
             direction = new_direction
 
 
-def check_collision():
-    pass
+def check_collision(snake):
+    x, y = snake.coordinates[0]
+
+    if x < 0 or x >= GAME_WIDTH:
+        return True
+    elif y < 0 or y >= GAME_HEIGHT:
+        return True
+
+    for body_part in snake.coordinates[1:]:
+        if x == body_part[0] and y == body_part[1]:
+            print("GAME OVER ")
+            return True
+
+    return False
+
+
+def restart_game():
+    canvas.delete(ALL)
+    global snake, food, score, direction
+    score = 0
+    direction = 'down'
+    label.config(text="Score: {}".format(score))
+    snake = Snake()
+    food = Food(snake.coordinates)
+    next_turn(snake, food)
 
 
 def game_over():
-    pass
+    canvas.delete(ALL)
+    game_over_text = canvas.create_text(canvas.winfo_width() // 2, canvas.winfo_height() // 2 - 50,
+                                        font=("Consolas", 70), text="GAME OVER", fill="red")
+
+    button_y_position = canvas.winfo_height() // 2 + 60
+    play_again_btn = Button(window, text="Play again", command=restart_game, font=("Consolas", 20), bg="#00FF00",
+                            fg="black")
+    canvas.create_window(canvas.winfo_width() // 2, button_y_position, window=play_again_btn)
 
 
 window = Tk()
@@ -118,9 +168,8 @@ window.bind("<Right>", lambda event: change_direction('right'))
 window.bind("<Up>", lambda event: change_direction('up'))
 window.bind("<Down>", lambda event: change_direction('down'))
 
-
 snake = Snake()
-food = Food()
+food = Food(snake.coordinates)
 
 next_turn(snake, food)
 
